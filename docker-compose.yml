@@ -1,0 +1,42 @@
+services:
+  mysql:
+    container_name: 'mysql'
+    image: mysql
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: lumem
+      MYSQL_USER: lumem
+      MYSQL_PASSWORD: 123456
+    networks:
+      - microservices
+    volumes:
+      - "./data:/var/lib/mysql"
+  phpmyadmin:
+    container_name: 'microservices-phpmyadmim'
+    image: phpmyadmin/phpmyadmin
+    networks:
+      - microservices
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8081:80"
+    volumes:
+      - ./sessions:/sessions
+  aplicacao:
+    container_name: 'application_microservice'
+    image: webdevops/php-apache-dev:8.2
+    ports:
+      - "81:80"
+    volumes:
+      - "/c/Users/Operador/Projetos/clientes_service:/app"
+    networks:
+      - microservices
+
+networks:
+  microservices:
+
+
